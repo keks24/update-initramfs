@@ -47,7 +47,7 @@ mount -t devtmpfs none /dev
 
 # encrypt and mount the root filesystem
 cryptsetup --tries 5 open --type luks $(findfs $(cmdline crypt_root)) cryptroot
-mount -o ro /dev/mapper/cryptroot /mnt/root || rescue_shell "ERROR: Could not mount root partition."
+mount -o ro /dev/mapper/cryptroot /mnt/root || rescue_shell "ERROR: Could not mount the root partition."
 
 # clean up
 umount /proc
