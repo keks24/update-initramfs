@@ -2,6 +2,28 @@
 
 `update-initramfs` updates your initramfs using pure bash.
 
+# Prerequisites
+* Settings in the kernel are set to work with an initramfs
+* The following packages are installed:
+```no-highlight
+awk
+chmod
+cp
+date
+echo
+grep
+ldd
+make
+md5sum
+mkdir
+rm
+sh
+tee
+touch
+tree
+uname
+```
+
 # Installation
 Clone the repository:
 ```bash
