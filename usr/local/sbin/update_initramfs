@@ -166,14 +166,14 @@ copyFilesFrom()
         done
     elif [[ "${file_type}" == "other" ]]
     then
-    local cp_opts="--archive --parents --update --verbose"
-    local cp_cmd="/bin/cp ${cp_opts}"
+        local cp_opts="--archive --parents --update --verbose"
+        local cp_cmd="/bin/cp ${cp_opts}"
 
-    for other_file in "${file_array[@]}"
-    do
-        /bin/echo -e "\tCopied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
-        eval "${cp_cmd}" "${file_directory}/${other_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
-    done
+        for other_file in "${file_array[@]}"
+        do
+            /bin/echo -e "\tCopied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
+            eval "${cp_cmd}" "${file_directory}/${other_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+        done
     fi
 
     unset file_directory
