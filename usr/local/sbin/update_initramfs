@@ -78,7 +78,7 @@ declare -a root_file_array
 declare -a sbin_file_array
 declare -a sys_file_array
 declare -a usr_file_array
-config_file_md5_sum="7aba8f8c2877971241bbd7592e0f7aa8"
+config_file_md5_sum="b03b9b5ed3c02bbc23b6069edb23b2af"
 config_directory="/usr/local/etc/${script_filename}"
 config_filename="${script_filename}.conf"
 check_config_cmd="/usr/bin/md5sum "${config_directory}/${config_filename}" | /bin/awk '{ print \$1 }'"
