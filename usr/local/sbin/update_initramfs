@@ -1,0 +1,324 @@
+#!/bin/bash
+#############################################################################
+# Copyright 2018 Ramon Fischer                                              #
+#                                                                           #
+# Licensed under the Apache License, Version 2.0 (the "License");           #
+# you may not use this file except in compliance with the License.          #
+# You may obtain a copy of the License at                                   #
+#                                                                           #
+#     http://www.apache.org/licenses/LICENSE-2.0                            #
+#                                                                           #
+# Unless required by applicable law or agreed to in writing, software       #
+# distributed under the License is distributed on an "AS IS" BASIS,         #
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  #
+# See the License for the specific language governing permissions and       #
+# limitations under the License.                                            #
+#############################################################################
+#
+# example structure:
+#
+# /usr/src/initramfs/
+# ├── bin
+# ├── dev
+# ├── etc
+# ├── init*
+# ├── lib
+# ├── lib64
+# ├── mnt
+# │   └── root
+# ├── proc
+# ├── root
+# ├── sbin
+# ├── sys
+# └── usr
+#     ├── lib
+#     └── lib64
+
+command_list=(awk chmod cp date echo grep ldd make md5sum mkdir rm sh tee touch tree uname)
+checkCommands()
+{
+    unalias "${command_list[@]}" 2>/dev/null
+
+    for current_command in "${command_list[@]}"
+    do
+        if [[ ! $(command -v ${current_command} 2>/dev/null) ]]
+        then
+            /bin/echo -e "\e[01;31mCould not find command '${current_command}'.\e[0m"
+            exit 1
+        fi
+    done
+}
+
+checkCommands
+
+# define global variables
+date=$(/bin/date +%Y%m%d)
+time=$(/bin/date +%H%M)
+script_directory="${0%/*}"
+script_filename="${0##*/}"
+kernel_directory="/usr/src/linux"
+log_directory="/var/log/${script_filename}"
+log_filename="${script_filename}.log"
+tee_opts="--append"
+tee_cmd="/usr/bin/tee ${tee_opts}"
+tree_opts="-aF --noreport"
+tree_cmd="/usr/bin/tree ${tree_opts}"
+chmod_opts="--change"
+chmod_cmd="/bin/chmod ${chmod_opts}"
+declare -a bin_file_array
+declare -a dev_file_array
+declare -a etc_file_array
+declare -a init_file_array
+declare -a lib_file_array
+declare -a lib64_file_array
+declare -a proc_file_array
+declare -a root_file_array
+declare -a sbin_file_array
+declare -a sys_file_array
+declare -a usr_file_array
+config_file_md5_sum="7aba8f8c2877971241bbd7592e0f7aa8"
+config_directory="/usr/local/etc/${script_filename}"
+config_filename="${script_filename}.conf"
+check_config_cmd="/usr/bin/md5sum "${config_directory}/${config_filename}" | /bin/awk '{ print \$1 }'"
+
+# prepare the log file
+if [[ ! -f "${log_directory}/${log_filename}" ]]
+then
+    /usr/bin/touch "${log_directory}/${log_filename}"
+else
+    /bin/echo -e "\n-------------" >> "${log_directory}/${log_filename}"
+    /bin/echo "${date}-${time}" >> "${log_directory}/${log_filename}"
+    /bin/echo -e "-------------\n" >> "${log_directory}/${log_filename}"
+fi
+
+# include the configuration file, if the md5 sums match
+if [[ $(eval "${check_config_cmd}") == "${config_file_md5_sum}" ]]
+then
+    source "${config_directory}/${config_filename}"
+else
+    /bin/echo -e "\e[01;31mThe defined checksum in the script does not match the generated checksum for the file '${config_directory}/${config_filename}'\e[0m"
+    /bin/echo -e "\e[01;31mExecute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'\e[0m"
+    /bin/echo "The defined checksum in the script does not match the generated checksum for the file '${config_directory}/${config_filename}'" >> "${log_directory}/${log_filename}"
+    /bin/echo "Execute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'" >> "${log_directory}/${log_filename}"
+    exit 1
+fi
+
+# prepare the directories
+## logs
+if [[ ! -d "${log_directory}" ]]
+then
+    /bin/mkdir --parents "${log_directory}"
+fi
+## initramfs
+/bin/mkdir --parents "${initramfs_directory}"/{bin,dev,etc,lib,lib64,mnt/root,proc,root,sbin,sys,usr/{lib,lib64}}
+
+checkIfFileExistsInArray()
+{
+    local file_directory="${1}"
+    local file_array=("${!2}")
+
+    for check_file in "${file_array[@]}"
+    do
+        if [[ ! -e "${file_directory}/${check_file}" ]]
+        then
+            /bin/echo -e "\e[01;31mFile '${file_directory}/${check_file}' is missing; exiting..."
+            /bin/echo "File '${file_directory}/${check_file}' is missing; exiting..." >> "${log_directory}/${log_filename}"
+            exit 1
+        fi
+    done
+}
+
+copyFilesFrom()
+{
+    local file_directory="${1}"
+    local file_type="${2}"
+    local file_array=("${!3}")
+
+    if [[ "${file_type}" == "binary" ]]
+    then
+        local cp_opts="--dereference --parents --preserve=all --update --verbose"
+        local cp_cmd="/bin/cp ${cp_opts}"
+
+        for bin_file in "${file_array[@]}"
+        do
+        /bin/echo -e "\tCopied the following files for ${file_directory}/${bin_file}:" >> "${log_directory}/${log_filename}"
+            shared_objects_list=$(/usr/bin/ldd ${file_directory}/${bin_file})
+        shared_objects_list_filtered=$(/bin/echo ${shared_objects_list} | /bin/grep --extended-regexp --only-matching "/[a-z0-9./_-]+")
+
+            if [[ "${shared_objects_list}" == *"not a dynamic executable" ]]
+            then
+        eval "${cp_cmd}" "${file_directory}/${bin_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+            else
+        eval "${cp_cmd}" ${shared_objects_list_filtered} "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+        eval "${cp_cmd}" "${file_directory}/${bin_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+            fi
+        done
+    elif [[ "${file_type}" == "init" ]]
+    then
+        local cp_opts="--archive --update --verbose"
+        local cp_cmd="/bin/cp ${cp_opts}"
+
+        for init_file in "${file_array[@]}"
+        do
+        /bin/echo -e "\tCopied the following files for ${file_directory}/${init_file}:" >> "${log_directory}/${log_filename}"
+            eval "${cp_cmd}" "${file_directory}/${init_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+            eval "${chmod_cmd}" 744 "${initramfs_directory}/${init_file}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+        done
+    elif [[ "${file_type}" == "other" ]]
+    then
+    local cp_opts="--archive --parents --update --verbose"
+    local cp_cmd="/bin/cp ${cp_opts}"
+
+    for other_file in "${file_array[@]}"
+    do
+        /bin/echo -e "\tCopied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
+        eval "${cp_cmd}" "${file_directory}/${other_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+    done
+    fi
+
+    unset file_directory
+    unset file_type
+    unset file_array
+}
+
+outputResultHead()
+{
+    /bin/echo -e "\n\e[01;30m-------------------------------------\e[0m"
+    /bin/echo -e "\e[01;30m-Copied/Updated the following files:-\e[0m"
+    /bin/echo -e "\e[01;30m-------------------------------------\e[0m\n"
+}
+
+outputResultTree()
+{
+    /bin/echo -e "\n\e[01;33m-------------------------------------\e[0m"
+    /bin/echo -e "\e[01;33m-Current structure of the initramfs:-\e[0m"
+    /bin/echo -e "\e[01;33m-------------------------------------\e[0m\n"
+    eval "${tree_cmd}" "${initramfs_directory}"
+    /bin/echo "" >> "${log_directory}/${log_filename}"
+    eval "${tree_cmd}" "${initramfs_directory}" >> "${log_directory}/${log_filename}"
+}
+
+outputResultInitramfs()
+{
+    local filename="${1}"
+
+    /bin/echo -e "\n\e[01;36m-------------------------------------\e[0m"
+    /bin/echo -e "\e[01;36m----Generated initramfs location:----\e[0m"
+    /bin/echo -e "\e[01;36m-------------------------------------\e[0m\n"
+    /bin/echo "${kernel_directory}/${filename}"
+    /bin/echo ""
+    /bin/echo "" >> "${log_directory}/${log_filename}"
+    /bin/echo "${kernel_directory}/${filename}" >> "${log_directory}/${log_filename}"
+}
+
+generateInitramfs()
+{
+    local initramfs_filename="custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz"
+
+    if [[ ! -e "${kernel_directory}/usr/gen_init_cpio" ]]
+    then
+        /usr/bin/make --directory="${kernel_directory}/usr" "gen_init_cpio"
+    else
+        eval "${chmod_cmd}" 755 "${kernel_directory}/"{usr/gen_init_cpio,scripts/gen_initramfs_list.sh}
+	pushd "${kernel_directory}" >/dev/null
+	/bin/sh "scripts/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
+	popd >/dev/null
+
+	outputResultInitramfs "${initramfs_filename}"
+
+	/bin/echo -e "\e[01;31mNext steps:\e[0m"
+	/bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
+	/bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
+	/bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
+    fi
+}
+
+main()
+{
+    outputResultHead
+
+    # check, if a file exists. parameters: "<location>" "<file_array>"
+    # copy files. parameters: "<location>" "<type>" "<file_array>"
+    ## copy files from "/bin/"
+    if (( ${#bin_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/bin" bin_file_array[@]
+        copyFilesFrom "/bin" "binary" bin_file_array[@]
+    fi
+
+    ## copy files from "/dev/"
+    if (( ${#dev_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/dev" dev_file_array[@]
+        copyFilesFrom "/dev" "other" dev_file_array[@]
+    fi
+
+    ## copy files from "/etc/"
+    if (( ${#etc_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/etc" etc_file_array[@]
+        copyFilesFrom "/etc" "other" etc_file_array[@]
+    fi
+
+    ## copy files from "${config_directory}/init_files
+    if (( ${#init_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "${config_directory}/init_files" init_file_array[@]
+        copyFilesFrom "${config_directory}/init_files" "init" init_file_array[@]
+    fi
+
+    ## copy files from "/lib/"
+    if (( ${#lib_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/lib" lib_file_array[@]
+        copyFilesFrom "/lib" "other" lib_file_array[@]
+    fi
+
+    ## copy files from "/lib64/"
+    if (( ${#lib64_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/lib64" lib64_file_array[@]
+        copyFilesFrom "/lib64" "other" lib64_file_array[@]
+    fi
+
+    ## copy files from "/proc/"
+    if (( ${#proc_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/proc" proc_file_array[@]
+        copyFilesFrom "/proc" "other" proc_file_array[@]
+    fi
+
+    ## copy files from "/root/"
+    if (( ${#root_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/root" root_file_array[@]
+        copyFilesFrom "/root" "other" root_file_array[@]
+    fi
+
+    ## copy files from "/sbin/"
+    if (( ${#sbin_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/sbin" sbin_file_array[@]
+        copyFilesFrom "/sbin" "binary" sbin_file_array[@]
+    fi
+
+    ## copy files from "/sys/"
+    if (( ${#sys_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/sys" sys_file_array[@]
+        copyFilesFrom "/sys" "other" sys_file_array[@]
+    fi
+
+    ## copy files from "/usr/"
+    if (( ${#usr_file_array[@]} > 0 ))
+    then
+        checkIfFileExistsInArray "/usr" usr_file_array[@]
+        copyFilesFrom "/usr" "other" usr_file_array[@]
+    fi
+
+    outputResultTree
+
+    generateInitramfs
+}
+
+main
