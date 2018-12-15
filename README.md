@@ -3,7 +3,7 @@
 `update-initramfs` updates your initramfs using pure bash.
 
 # Prerequisites
-* Settings in the kernel are set to work with an initramfs
+* Enabled settings in the kernel to work with an initramfs
 * The following packages are installed:
 ```no-highlight
 awk
