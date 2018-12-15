@@ -196,6 +196,7 @@ outputResultTree()
     /bin/echo -e "\e[01;33m-------------------------------------\e[0m\n"
     eval "${tree_cmd}" "${initramfs_directory}"
     /bin/echo "" >> "${log_directory}/${log_filename}"
+    /bin/echo -e "\tCurrent structure of the initramfs:" >> "${log_directory}/${log_filename}"
     eval "${tree_cmd}" "${initramfs_directory}" >> "${log_directory}/${log_filename}"
 }
 
@@ -211,7 +212,7 @@ outputResultInitramfs()
     /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
     /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
     /bin/echo "" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "\tGenerated the following file:" >> "${log_directory}/${log_filename}"
+    /bin/echo -e "\tGenerated the following initramfs file:" >> "${log_directory}/${log_filename}"
     /bin/echo "${kernel_directory}/${initramfs_filename}" >> "${log_directory}/${log_filename}"
 }
 
