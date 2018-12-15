@@ -220,16 +220,16 @@ generateInitramfs()
         /usr/bin/make --directory="${kernel_directory}/usr" "gen_init_cpio"
     else
         eval "${chmod_cmd}" 755 "${kernel_directory}/"{usr/gen_init_cpio,scripts/gen_initramfs_list.sh}
-	pushd "${kernel_directory}" >/dev/null
-	/bin/sh "scripts/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
-	popd >/dev/null
+    pushd "${kernel_directory}" >/dev/null
+    /bin/sh "scripts/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
+    popd >/dev/null
 
-	outputResultInitramfs "${initramfs_filename}"
+    outputResultInitramfs "${initramfs_filename}"
 
-	/bin/echo -e "\e[01;31mNext steps:\e[0m"
-	/bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
-	/bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
-	/bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
+    /bin/echo -e "\e[01;31mNext steps:\e[0m"
+    /bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
+    /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
+    /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
     fi
 }
 
