@@ -204,7 +204,7 @@ outputResultInitramfs()
     /bin/echo -e "\n\e[01;36m-------------------------------------\e[0m"
     /bin/echo -e "\e[01;36m----Generated initramfs location:----\e[0m"
     /bin/echo -e "\e[01;36m-------------------------------------\e[0m\n"
-    /bin/echo "${kernel_directory}/${filename}"
+    /bin/echo "${kernel_directory}/${initramfs_filename}"
     /bin/echo ""
     /bin/echo -e "\e[01;31mNext steps:\e[0m"
     /bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
