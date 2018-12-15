@@ -211,7 +211,7 @@ outputResultInitramfs()
     /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
     /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
     /bin/echo "" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "\tGenerated the following file:"
+    /bin/echo -e "\tGenerated the following file:" >> "${log_directory}/${log_filename}"
     /bin/echo "${kernel_directory}/${filename}" >> "${log_directory}/${log_filename}"
 }
 
