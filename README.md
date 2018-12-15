@@ -35,9 +35,9 @@ sys_file_array=()
 usr_file_array=()
 ```
 
-The script analyses the defined arrays and determines, if the binary was statically or dynamically compiled using `ldd`. It then copies all related files to `/usr/src/initramfs/` and uses `/usr/src/linux/scripts/gen_initramfs_list.sh` and `/usr/src/linux/usr/gen_init_cpio`, which are provided by the kernel source files, to build the initramfs in `/usr/src/custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz`.
+The script analyses the defined arrays and determines, if the binary was statically or dynamically compiled using `ldd`. It then copies all related files from your system to `/usr/src/initramfs/` and uses `/usr/src/linux/scripts/gen_initramfs_list.sh` and `/usr/src/linux/usr/gen_init_cpio`, which are provided by the kernel source files, to build the initramfs in `/usr/src/custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz`.
 
-Custom scripts reside in `/usr/local/etc/update_initramfs/init_files`.
+Custom scripts, like the `init` script, reside in `/usr/local/etc/update_initramfs/init_files`.
 
 3. Check the content of the configuration file and update its md5 sum in the script:
 ```bash
