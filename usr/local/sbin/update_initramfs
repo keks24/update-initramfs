@@ -82,6 +82,15 @@ config_directory="/usr/local/etc/${script_filename}"
 config_filename="${script_filename}.conf"
 check_config_cmd="/usr/bin/md5sum "${config_directory}/${config_filename}" | /bin/awk '{ print \$1 }'"
 
+# prepare the directories
+## logs
+if [[ ! -d "${log_directory}" ]]
+then
+    /bin/mkdir --parents "${log_directory}"
+fi
+## initramfs
+/bin/mkdir --parents "${initramfs_directory}"/{bin,dev,etc,lib,lib64,mnt/root,proc,root,sbin,sys,usr/{lib,lib64}}
+
 # prepare the log file
 if [[ ! -f "${log_directory}/${log_filename}" ]]
 then
@@ -103,15 +112,6 @@ else
     /bin/echo "Execute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'" >> "${log_directory}/${log_filename}"
     exit 1
 fi
-
-# prepare the directories
-## logs
-if [[ ! -d "${log_directory}" ]]
-then
-    /bin/mkdir --parents "${log_directory}"
-fi
-## initramfs
-/bin/mkdir --parents "${initramfs_directory}"/{bin,dev,etc,lib,lib64,mnt/root,proc,root,sbin,sys,usr/{lib,lib64}}
 
 checkIfFileExistsInArray()
 {
