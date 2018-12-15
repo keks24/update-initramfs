@@ -28,7 +28,7 @@ cmdline()
 {
     local value
     value=" $(cat /proc/cmdline) "
-    value="${value##* $1=}"
+    value="${value##* ${1}=}"
     value="${value%% *}"
 
     if [[ "${value}" != "" ]]
