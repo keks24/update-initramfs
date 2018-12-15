@@ -57,6 +57,7 @@ time=$(/bin/date +%H%M)
 script_directory="${0%/*}"
 script_filename="${0##*/}"
 kernel_directory="/usr/src/linux"
+initramfs_filename="custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz"
 log_directory="/var/log/${script_filename}"
 log_filename="${script_filename}.log"
 tee_opts="--append"
@@ -200,8 +201,6 @@ outputResultTree()
 
 outputResultInitramfs()
 {
-    local filename="${1}"
-
     /bin/echo -e "\n\e[01;36m-------------------------------------\e[0m"
     /bin/echo -e "\e[01;36m----Generated initramfs location:----\e[0m"
     /bin/echo -e "\e[01;36m-------------------------------------\e[0m\n"
@@ -213,23 +212,21 @@ outputResultInitramfs()
 
 generateInitramfs()
 {
-    local initramfs_filename="custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz"
-
     if [[ ! -e "${kernel_directory}/usr/gen_init_cpio" ]]
     then
         /usr/bin/make --directory="${kernel_directory}/usr" "gen_init_cpio"
     else
         eval "${chmod_cmd}" 755 "${kernel_directory}/"{usr/gen_init_cpio,scripts/gen_initramfs_list.sh}
-    pushd "${kernel_directory}" >/dev/null
-    /bin/sh "scripts/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
-    popd >/dev/null
+        pushd "${kernel_directory}" >/dev/null
+        /bin/sh "scripts/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
+        popd >/dev/null
 
-    outputResultInitramfs "${initramfs_filename}"
+        outputResultInitramfs
 
-    /bin/echo -e "\e[01;31mNext steps:\e[0m"
-    /bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
-    /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
-    /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
+        /bin/echo -e "\e[01;31mNext steps:\e[0m"
+        /bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
+        /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
+        /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
     fi
 }
 
