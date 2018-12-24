@@ -1,8 +1,9 @@
 # Introduction
 
-`update-initramfs` updates your initramfs using pure bash.
+`update-initramfs` updates your initramfs using pure bash and generates it via provided kernel scripts.
 
 # Prerequisites
+* Kernel source files in `/usr/src/linux/`, where `linux` is a symlink to the directory with the latest kernel
 * Enabled kernel settings to work with an initramfs
 * The following packages are installed:
 ```no-highlight
@@ -25,7 +26,7 @@ uname
 ```
 
 # Installation
-Clone the repository:
+Clone the repository into your current working directory:
 ```bash
 $ git clone "https://gitlab.com/keks24/update-initramfs.git"
 ```
@@ -33,8 +34,8 @@ Copy all necessary files:
 ```bash
 $ cd "update-initramfs/"
 $ cp --recursive "usr/local/etc/update_initramfs/" "/usr/local/etc/"
-$ cp --recursive "usr/local/sbin/update_initramfs" "/usr/local/sbin/"
-$ cp --recursive "etc/logrotate.d/update_initramfs" "/etc/logrotate.d/"
+$ cp "usr/local/sbin/update_initramfs" "/usr/local/sbin/"
+$ cp "etc/logrotate.d/update_initramfs" "/etc/logrotate.d/"
 $ chown --recursive root:root "/usr/local/etc/update_initramfs/" "/usr/local/sbin/update_initramfs" "/etc/logrotate.d/update_initramfs"
 ```
 
@@ -57,7 +58,7 @@ sys_file_array=()
 usr_file_array=()
 ```
 
-The script analyses the defined arrays and determines, if a binary file was statically or dynamically compiled using `ldd`. It then copies all related files from your system to `/usr/src/initramfs/` and uses `/usr/src/linux/scripts/gen_initramfs_list.sh` and `/usr/src/linux/usr/gen_init_cpio`, which are provided by the kernel source files, to build the initramfs in `/usr/src/custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz`.
+The script analyses the defined arrays and determines, if a binary file was statically or dynamically compiled using `ldd`. It then copies all related files from your system (e.g. `/bin/busybox`) to `/usr/src/initramfs/` and uses `/usr/src/linux/scripts/gen_initramfs_list.sh` and `/usr/src/linux/usr/gen_init_cpio`, which are provided by the kernel source files, to build the initramfs in `/usr/src/custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz`.
 
 Custom scripts, like the `init` script, reside in `/usr/local/etc/update_initramfs/init_files`.
 
