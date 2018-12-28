@@ -4,7 +4,7 @@
 
 # Prerequisites
 * Kernel source files in `/usr/src/linux/`, where `linux` is a symlink to the directory with the latest kernel
-* Enabled kernel settings to work with an initramfs
+* Enabled kernel settings to work with an initramfs. Consult [this page](https://wiki.gentoo.org/wiki/Custom_Initramfs) for more information.
 * The following packages are installed:
 ```no-highlight
 awk
