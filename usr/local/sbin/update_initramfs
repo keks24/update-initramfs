@@ -90,7 +90,7 @@ then
     /bin/mkdir --parents "${log_directory}"
 fi
 ## initramfs
-/bin/mkdir --parents "${initramfs_directory}"/{bin,dev,etc,lib,lib64,mnt/root,proc,root,sbin,sys,usr/{lib,lib64}}
+/bin/mkdir --parents "${initramfs_directory}"/{bin,boot,dev,etc,home,lib,lib64,mnt/root,proc,root,sbin,sys,usr/{lib,lib64}}
 
 # prepare the log file
 if [[ ! -f "${log_directory}/${log_filename}" ]]
