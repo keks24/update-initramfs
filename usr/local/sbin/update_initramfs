@@ -143,7 +143,7 @@ copyFilesFrom()
 
         for bin_file in "${file_array[@]}"
         do
-            /bin/echo -e "\tCopied the following files for ${file_directory}/${bin_file}:" >> "${log_directory}/${log_filename}"
+            /bin/echo -e "    Copied the following files for ${file_directory}/${bin_file}:" >> "${log_directory}/${log_filename}"
             shared_objects_list=$(/usr/bin/ldd ${file_directory}/${bin_file})
             shared_objects_list_filtered=$(/bin/echo ${shared_objects_list} | /bin/grep --extended-regexp --only-matching "/[a-z0-9./_-]+")
 
@@ -162,7 +162,7 @@ copyFilesFrom()
 
         for init_file in "${file_array[@]}"
         do
-            /bin/echo -e "\tCopied the following files for ${file_directory}/${init_file}:" >> "${log_directory}/${log_filename}"
+            /bin/echo -e "    Copied the following files for ${file_directory}/${init_file}:" >> "${log_directory}/${log_filename}"
             eval "${cp_cmd}" "${file_directory}/${init_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
             eval "${chmod_cmd}" 744 "${initramfs_directory}/${init_file}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
         done
@@ -173,7 +173,7 @@ copyFilesFrom()
 
         for other_file in "${file_array[@]}"
         do
-            /bin/echo -e "\tCopied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
+            /bin/echo -e "    Copied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
             eval "${cp_cmd}" "${file_directory}/${other_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
         done
     fi
@@ -197,7 +197,7 @@ outputResultTree()
     /bin/echo -e "\e[01;33m-------------------------------------\e[0m\n"
     eval "${tree_cmd}" "${initramfs_directory}"
     /bin/echo "" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "\tCurrent structure of the initramfs:" >> "${log_directory}/${log_filename}"
+    /bin/echo -e "    Current structure of the initramfs:" >> "${log_directory}/${log_filename}"
     eval "${tree_cmd}" "${initramfs_directory}" >> "${log_directory}/${log_filename}"
 }
 
@@ -213,7 +213,7 @@ outputResultInitramfs()
     /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
     /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
     /bin/echo "" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "\tGenerated the following initramfs file:" >> "${log_directory}/${log_filename}"
+    /bin/echo -e "    Generated the following initramfs file:" >> "${log_directory}/${log_filename}"
     /bin/echo "${initramfs_directory/\/initramfs/}/${initramfs_filename}" >> "${log_directory}/${log_filename}"
 }
 
