@@ -24,6 +24,7 @@ rescue_shell()
     exec sh
 }
 
+## filter kernel parameter entries
 cmdline()
 {
     local value

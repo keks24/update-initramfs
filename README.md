@@ -64,7 +64,7 @@ Custom scripts, like the `init` script, reside in `/usr/local/etc/update_initram
 
 3. Check the content of the configuration file and update its md5 sum in the script:
 ```bash
-$ /usr/bin/md5sum "/usr/local/etc/update_initramfs/update_initramfs.conf"
+$ md5sum "/usr/local/etc/update_initramfs/update_initramfs.conf"
 ```
 ```no-highlight
 b03b9b5ed3c02bbc23b6069edb23b2af  /usr/local/etc/update_initramfs/update_initramfs.conf
