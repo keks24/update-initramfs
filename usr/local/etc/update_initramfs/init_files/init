@@ -19,8 +19,23 @@
 ## rescue shell
 rescue_shell()
 {
-    echo -e "\e[01;31m${@}\e[0m"
-    echo "Something went wrong. Dropping to a shell."
+    local error_type="${1}"
+    local error_message="${2}"
+
+    case "${error_type}" in
+        "ERROR")
+            echo -e "\e[01;31mERROR: ${error_message}\e[0m"
+            ;;
+
+        "WARNING")
+            echo -e "\e[01;33mWARNING: ${error_message}\e[0m"
+            ;;
+
+        *)
+            echo -e "\e[01;31mSomething went wrong. Dropping to a shell.\e[0m"
+            ;;
+    esac
+
     exec sh
 }
 
@@ -43,12 +58,15 @@ mount -t proc none /proc
 mount -t sysfs none /sys
 mount -t devtmpfs none /dev
 
-# my stuff
-# stuff
+# disable kernel messages
+#echo "0" > /proc/sys/kernel/printk
+
+# clear the screen
+#clear
 
 # encrypt and mount the root filesystem
-cryptsetup --tries 5 open --type luks $(findfs $(cmdline crypt_root)) cryptroot
-mount -o ro /dev/mapper/cryptroot /mnt/root || rescue_shell "ERROR: Could not mount the root partition."
+cryptsetup --tries 5 open --type luks $(findfs $(cmdline crypt_root)) cryptroot || rescue_shell "ERROR" "Could not decrypt the root partition."
+mount -o ro /dev/mapper/cryptroot /mnt/root || rescue_shell "ERROR" "Could not mount the root partition."
 
 # clean up
 umount /proc
