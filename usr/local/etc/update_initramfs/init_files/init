@@ -53,6 +53,9 @@ cmdline()
     fi
 }
 
+# set custom font for "/dev/console"
+setfont -C /dev/console /usr/share/consolefonts/ter-112n.psf.gz
+
 # temporarily mount several filesystems
 mount -t proc none /proc
 mount -t sysfs none /sys
