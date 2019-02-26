@@ -224,9 +224,9 @@ generateInitramfs()
         /usr/bin/make --directory="${kernel_directory}/usr" "gen_init_cpio"
     fi
 
-    eval "${chmod_cmd}" 755 "${kernel_directory}/"{usr/gen_init_cpio,scripts/gen_initramfs_list.sh}
+    eval "${chmod_cmd}" 755 "${kernel_directory}/usr/"{gen_init_cpio,gen_initramfs_list.sh}
     pushd "${kernel_directory}" >/dev/null
-    /bin/sh "scripts/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
+    /bin/sh "usr/gen_initramfs_list.sh" -o "../${initramfs_filename}" "${initramfs_directory}"
     popd >/dev/null
 }
 
