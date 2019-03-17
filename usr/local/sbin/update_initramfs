@@ -34,7 +34,7 @@
 #     ├── lib
 #     └── lib64
 
-command_list=(awk chmod cp date echo grep ldd make md5sum mkdir rm sh tee touch tree uname)
+command_list=(awk chmod cp date echo grep ldd make md5sum mkdir rm sh tee touch tree)
 checkCommands()
 {
     unalias "${command_list[@]}" 2>/dev/null
@@ -58,7 +58,7 @@ script_directory="${0%/*}"
 script_filename="${0##*/}"
 kernel_directory="/usr/src/linux"
 initramfs_directory="/usr/src/initramfs"
-initramfs_filename="custom-initramfs-$(/usr/bin/uname --kernel-release).cpio.gz"
+initramfs_filename="custom-initramfs-$(/usr/bin/make ${kernel_direcotry}).cpio.gz"
 log_directory="/var/log/${script_filename}"
 log_filename="${script_filename}.log"
 tee_opts="--append"
