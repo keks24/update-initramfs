@@ -3,7 +3,7 @@
 `update-initramfs` updates your initramfs using pure bash and generates it via provided kernel scripts.
 
 # Prerequisites
-* Kernel source files in `/usr/src/linux/`, where `linux` is a symlink to the directory of the current kernel which is in use
+* Kernel source files in `/usr/src/linux/`, where `linux` is a symlink to the directory of the kernel which is currently in use
 * Enabled kernel settings to work with an initramfs. Consult [this page](https://wiki.gentoo.org/wiki/Custom_Initramfs) for more information.
 * The following packages are installed:
 ```no-highlight
