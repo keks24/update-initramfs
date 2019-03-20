@@ -44,6 +44,8 @@ $ chown --recursive root:root "/usr/local/etc/update_initramfs/" "/usr/local/sbi
     * Make sure that the path `/usr/local/sbin/` is in your `${PATH}` variable:
 ```bash
 $ echo "${PATH//:/\n}"
+```
+```
 /home/ramon/bin
 /usr/local/bin
 /usr/bin
