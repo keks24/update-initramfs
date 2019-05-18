@@ -1,5 +1,4 @@
 # Introduction
-
 `update-initramfs` updates your initramfs using pure bash and generates it via provided kernel scripts.
 
 # Prerequisites
