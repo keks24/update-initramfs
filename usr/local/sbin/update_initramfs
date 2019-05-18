@@ -34,7 +34,7 @@
 #     ├── lib
 #     └── lib64
 
-command_list=("awk" "chmod" "cp" "date" "echo" "grep" "ldd" "make" "md5sum" "mkdir" "rm" "sh" "tee" "touch" "tree")
+command_list=(awk chmod cp date echo grep ldd make md5sum mkdir rm sh tee touch tree)
 checkCommands()
 {
     unalias "${command_list[@]}" 2>/dev/null
