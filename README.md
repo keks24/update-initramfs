@@ -13,6 +13,7 @@ date
 echo
 grep
 ldd
+logrotate
 make
 md5sum
 mkdir
