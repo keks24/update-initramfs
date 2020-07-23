@@ -91,7 +91,7 @@ $ vi "/usr/local/sbin/update_initramfs"
 ```
 ```bash
 [...]
-config_file_md5_sum="b03b9b5ed3c02bbc23b6069edb23b2af"
+config_file_md5_sum="074f88a3f572df072b35d2e2cbd83d15"
 [...]
 ```
 
