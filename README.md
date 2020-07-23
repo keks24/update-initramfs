@@ -84,7 +84,7 @@ Custom scripts, like the `init` script, reside in `/usr/local/etc/update_initram
 $ md5sum "/usr/local/etc/update_initramfs/update_initramfs.conf"
 ```
 ```no-highlight
-b03b9b5ed3c02bbc23b6069edb23b2af  /usr/local/etc/update_initramfs/update_initramfs.conf
+074f88a3f572df072b35d2e2cbd83d15  /usr/local/etc/update_initramfs/update_initramfs.conf
 ```
 ```bash
 $ vi "/usr/local/sbin/update_initramfs"
