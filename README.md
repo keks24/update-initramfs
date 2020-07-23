@@ -25,23 +25,7 @@ tree
 uname
 ```
 
-# Installation
-Clone the repository into your current working directory:
-```bash
-$ git clone "https://gitlab.com/keks24/update-initramfs.git"
-```
-Copy all necessary files:
-```bash
-$ cd "update-initramfs/"
-$ cp --recursive "usr/local/etc/update_initramfs/" "/usr/local/etc/"
-$ cp "usr/local/sbin/update_initramfs" "/usr/local/sbin/"
-$ cp "etc/logrotate.d/update_initramfs" "/etc/logrotate.d/"
-$ chown --recursive root:root "/usr/local/etc/update_initramfs/" "/usr/local/sbin/update_initramfs" "/etc/logrotate.d/update_initramfs"
-```
-
-# Usage
-1. Make sure you have set the appropriate kernel settings. Consult [this page](https://wiki.gentoo.org/wiki/Custom_Initramfs) for more information.
-    * Make sure that the path `/usr/local/sbin/` is in your `${PATH}` variable:
+* The path `/home/$(id --user --name)/bin/` exists in the `${PATH}` variable:
 ```bash
 $ echo "${PATH//:/\n}"
 ```
@@ -59,6 +43,22 @@ $ echo "${PATH//:/\n}"
 /opt/bin
 ```
 
+# Installation
+Clone the repository into your current working directory:
+```bash
+$ git clone "https://gitlab.com/keks24/update-initramfs.git"
+```
+Copy all necessary files:
+```bash
+$ cd "update-initramfs/"
+$ cp --recursive "usr/local/etc/update_initramfs/" "/usr/local/etc/"
+$ cp "usr/local/sbin/update_initramfs" "/usr/local/sbin/"
+$ cp "etc/logrotate.d/update_initramfs" "/etc/logrotate.d/"
+$ chown --recursive root:root "/usr/local/etc/update_initramfs/" "/usr/local/sbin/update_initramfs" "/etc/logrotate.d/update_initramfs"
+```
+
+# Usage
+1. Make sure you have set the appropriate kernel settings. Consult [this page](https://wiki.gentoo.org/wiki/Custom_Initramfs) for more information.
 2. Enter the needed `binaries` and `shared objects` in the `update_initramfs.conf`:
 ```bash
 [...]
