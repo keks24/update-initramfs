@@ -25,7 +25,7 @@ tree
 uname
 ```
 
-* The path `/home/$(id --user --name)/bin/` exists in the `${PATH}` variable:
+* The path `/usr/local/sbin/` exists in the `${PATH}` variable:
 ```bash
 $ echo "${PATH//:/\n}"
 ```
