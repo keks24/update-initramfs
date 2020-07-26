@@ -1,5 +1,5 @@
 # Introduction
-`update-initramfs` updates your initramfs using pure bash and generates it via provided kernel scripts.
+`update-initramfs` updates your initramfs using bash and generates it via provided kernel scripts.
 
 # Prerequisites
 * Kernel source files in `/usr/src/linux/`, where `linux` is a symlink to the directory of the kernel which is currently in use
