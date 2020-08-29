@@ -209,7 +209,7 @@ outputResultInitramfs()
     /bin/echo "${initramfs_directory/\/initramfs/}/${initramfs_filename}"
     /bin/echo ""
     /bin/echo -e "\e[01;31mNext steps:\e[0m"
-    /bin/echo -e "\e[01;34m1. Move the file '${initramfs_filename}' to '/boot/'\e[0m"
+    /bin/echo -e "\e[01;34m1. Move the file '${initramfs_directory/\/initramfs/}/${initramfs_filename}' to '/boot/'\e[0m"
     /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
     /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
     /bin/echo "" >> "${log_directory}/${log_filename}"
