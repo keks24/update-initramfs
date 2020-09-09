@@ -22,5 +22,6 @@
     delaycompress
     missingok
     notifempty
+    copytruncate
     create 0644 root root
 }
