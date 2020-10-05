@@ -46,7 +46,7 @@ $ echo "${PATH//:/\n}"
 # Installation
 Clone the repository into your current working directory:
 ```bash
-$ git clone "https://gitlab.com/keks24/update-initramfs.git"
+$ git clone "https://codeberg.org/keks24/update-initramfs.git"
 ```
 Copy all necessary files:
 ```bash
