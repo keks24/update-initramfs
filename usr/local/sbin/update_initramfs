@@ -34,7 +34,7 @@
 #     ├── lib
 #     └── lib64
 
-command_list=(awk chmod cp cpio date echo find grep gzip ldd make md5sum mkdir rm sh tee touch tree)
+command_list=(awk chmod cp cpio date find grep gzip ldd make md5sum mkdir rm sh tee touch tree)
 checkCommands()
 {
     unalias "${command_list[@]}" 2>/dev/null
@@ -43,7 +43,7 @@ checkCommands()
     do
         if [[ ! $(command -v "${current_command}" 2>/dev/null) ]]
         then
-            /bin/echo -e "\e[01;31mCould not find command '${current_command}'.\e[0m"
+            echo -e "\e[01;31mCould not find command '${current_command}'.\e[0m"
             exit 1
         fi
     done
@@ -79,7 +79,7 @@ declare -a root_file_array
 declare -a sbin_file_array
 declare -a sys_file_array
 declare -a usr_file_array
-config_file_md5_sum="ce8ff3ed2ce35e8bdb3dc3dc5c2f4378"
+config_file_md5_sum="f2f93af83839fe9aebdfa8965fe52cea"
 config_directory="/usr/local/etc/${script_filename}"
 config_filename="${script_filename}.conf"
 check_config_cmd="/usr/bin/md5sum "${config_directory}/${config_filename}" | /bin/awk '{ print \$1 }'"
@@ -98,9 +98,9 @@ if [[ ! -f "${log_directory}/${log_filename}" ]]
 then
     /usr/bin/touch "${log_directory}/${log_filename}"
 else
-    /bin/echo -e "\n-------------" >> "${log_directory}/${log_filename}"
-    /bin/echo "${date}-${time}" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "-------------\n" >> "${log_directory}/${log_filename}"
+    echo -e "\n-------------" >> "${log_directory}/${log_filename}"
+    echo "${date}-${time}" >> "${log_directory}/${log_filename}"
+    echo -e "-------------\n" >> "${log_directory}/${log_filename}"
 fi
 
 # include the configuration file, if the md5 sums match
@@ -108,10 +108,10 @@ if [[ $(eval "${check_config_cmd}") == "${config_file_md5_sum}" ]]
 then
     source "${config_directory}/${config_filename}"
 else
-    /bin/echo -e "\e[01;31mThe defined checksum in the script does not match the generated checksum for the file '${config_directory}/${config_filename}'\e[0m"
-    /bin/echo -e "\e[01;31mExecute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'\e[0m"
-    /bin/echo "The defined checksum in the script does not match the generated checksum for the file '${config_directory}/${config_filename}'" >> "${log_directory}/${log_filename}"
-    /bin/echo "Execute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'" >> "${log_directory}/${log_filename}"
+    echo -e "\e[01;31mThe defined checksum in the script does not match the generated checksum for the file '${config_directory}/${config_filename}'\e[0m"
+    echo -e "\e[01;31mExecute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'\e[0m"
+    echo "The defined checksum in the script does not match the generated checksum for the file '${config_directory}/${config_filename}'" >> "${log_directory}/${log_filename}"
+    echo "Execute: '/usr/bin/md5sum ${config_directory}/${config_filename}' and update the variable \${config_file_md5_sum} in '${script_directory}/${script_filename}'" >> "${log_directory}/${log_filename}"
     exit 1
 fi
 
@@ -124,8 +124,8 @@ checkIfFileExistsInArray()
     do
         if [[ ! -e "${file_directory}/${check_file}" ]]
         then
-            /bin/echo -e "\e[01;31mFile '${file_directory}/${check_file}' is missing; exiting..."
-            /bin/echo "File '${file_directory}/${check_file}' is missing; exiting..." >> "${log_directory}/${log_filename}"
+            echo -e "\e[01;31mFile '${file_directory}/${check_file}' is missing; exiting..."
+            echo "File '${file_directory}/${check_file}' is missing; exiting..." >> "${log_directory}/${log_filename}"
             exit 1
         fi
     done
@@ -144,7 +144,7 @@ copyFilesFrom()
 
         for bin_file in "${file_array[@]}"
         do
-            /bin/echo -e "    Copied the following files for ${file_directory}/${bin_file}:" >> "${log_directory}/${log_filename}"
+            echo -e "    Copied the following files for ${file_directory}/${bin_file}:" >> "${log_directory}/${log_filename}"
             shared_objects_list=$(/usr/bin/ldd "${file_directory}/${bin_file}" 2>&1)
             shared_objects_list_filtered=$(/bin/grep --extended-regexp --only-matching "/[a-z0-9./_-]+" <<< "${shared_objects_list}")
 
@@ -163,7 +163,7 @@ copyFilesFrom()
 
         for init_file in "${file_array[@]}"
         do
-            /bin/echo -e "    Copied the following files for ${file_directory}/${init_file}:" >> "${log_directory}/${log_filename}"
+            echo -e "    Copied the following files for ${file_directory}/${init_file}:" >> "${log_directory}/${log_filename}"
             eval "${cp_cmd}" "${file_directory}/${init_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
             eval "${chmod_cmd}" 744 "${initramfs_directory}/${init_file}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
         done
@@ -174,7 +174,7 @@ copyFilesFrom()
 
         for other_file in "${file_array[@]}"
         do
-            /bin/echo -e "    Copied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
+            echo -e "    Copied the following files for ${file_directory}/${other_file}:" >> "${log_directory}/${log_filename}"
             eval "${cp_cmd}" "${file_directory}/${other_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
         done
     fi
@@ -186,36 +186,36 @@ copyFilesFrom()
 
 outputResultHead()
 {
-    /bin/echo -e "\n\e[01;30m-------------------------------------\e[0m"
-    /bin/echo -e "\e[01;30m-Copied/Updated the following files:-\e[0m"
-    /bin/echo -e "\e[01;30m-------------------------------------\e[0m\n"
+    echo -e "\n\e[01;30m-------------------------------------\e[0m"
+    echo -e "\e[01;30m-Copied/Updated the following files:-\e[0m"
+    echo -e "\e[01;30m-------------------------------------\e[0m\n"
 }
 
 outputResultTree()
 {
-    /bin/echo -e "\n\e[01;33m-------------------------------------\e[0m"
-    /bin/echo -e "\e[01;33m-Current structure of the initramfs:-\e[0m"
-    /bin/echo -e "\e[01;33m-------------------------------------\e[0m\n"
+    echo -e "\n\e[01;33m-------------------------------------\e[0m"
+    echo -e "\e[01;33m-Current structure of the initramfs:-\e[0m"
+    echo -e "\e[01;33m-------------------------------------\e[0m\n"
     eval "${tree_cmd}" "${initramfs_directory}"
-    /bin/echo "" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "    Current structure of the initramfs:" >> "${log_directory}/${log_filename}"
+    echo "" >> "${log_directory}/${log_filename}"
+    echo -e "    Current structure of the initramfs:" >> "${log_directory}/${log_filename}"
     eval "${tree_cmd}" "${initramfs_directory}" >> "${log_directory}/${log_filename}"
 }
 
 outputResultInitramfs()
 {
-    /bin/echo -e "\n\e[01;36m-------------------------------------\e[0m"
-    /bin/echo -e "\e[01;36m----Generated initramfs location:----\e[0m"
-    /bin/echo -e "\e[01;36m-------------------------------------\e[0m\n"
-    /bin/echo "${initramfs_directory/\/initramfs/}/${initramfs_filename}"
-    /bin/echo ""
-    /bin/echo -e "\e[01;31mNext steps:\e[0m"
-    /bin/echo -e "\e[01;34m1. Move the file '${initramfs_directory/\/initramfs/}/${initramfs_filename}' to '/boot/'\e[0m"
-    /bin/echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
-    /bin/echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
-    /bin/echo "" >> "${log_directory}/${log_filename}"
-    /bin/echo -e "    Generated the following initramfs file:" >> "${log_directory}/${log_filename}"
-    /bin/echo "${initramfs_directory/\/initramfs/}/${initramfs_filename}" >> "${log_directory}/${log_filename}"
+    echo -e "\n\e[01;36m-------------------------------------\e[0m"
+    echo -e "\e[01;36m----Generated initramfs location:----\e[0m"
+    echo -e "\e[01;36m-------------------------------------\e[0m\n"
+    echo "${initramfs_directory/\/initramfs/}/${initramfs_filename}"
+    echo ""
+    echo -e "\e[01;31mNext steps:\e[0m"
+    echo -e "\e[01;34m1. Move the file '${initramfs_directory/\/initramfs/}/${initramfs_filename}' to '/boot/'\e[0m"
+    echo -e "\e[01;34m2. Update your bootloader entries\e[0m"
+    echo -e "\e[01;34m   When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB\e[0m\n"
+    echo "" >> "${log_directory}/${log_filename}"
+    echo -e "    Generated the following initramfs file:" >> "${log_directory}/${log_filename}"
+    echo "${initramfs_directory/\/initramfs/}/${initramfs_filename}" >> "${log_directory}/${log_filename}"
 }
 
 generateInitramfs()
