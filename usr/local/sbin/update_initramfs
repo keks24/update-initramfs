@@ -221,7 +221,7 @@ outputResultInitramfs()
 generateInitramfs()
 {
     pushd "${initramfs_directory}" >/dev/null
-    /usr/bin/find . -print0 | cpio --null --create --format="newc" | /bin/gzip --best --no-name --force --stdout > "${initramfs_directory/\/initramfs/}/${initramfs_filename}"
+    /usr/bin/find . -print0 | /bin/cpio --null --create --format="newc" --quiet | /bin/gzip --best --no-name --force --stdout > "${initramfs_directory/\/initramfs/}/${initramfs_filename}"
     popd >/dev/null
 }
 
