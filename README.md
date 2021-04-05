@@ -55,7 +55,6 @@ $ cp --recursive "usr/local/etc/update_initramfs/" "/usr/local/etc/"
 $ cp "usr/local/sbin/update_initramfs" "/usr/local/sbin/"
 $ cp "etc/logrotate.d/update_initramfs" "/etc/logrotate.d/"
 $ chown --recursive root:root "/usr/local/etc/update_initramfs/" "/usr/local/sbin/update_initramfs" "/etc/logrotate.d/update_initramfs"
-$ chown 755 "/usr/local/sbin/update_initramfs"
 ```
 
 # Usage
