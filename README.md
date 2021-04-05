@@ -101,15 +101,33 @@ $ update_initramfs
 -Copied/Updated the following files:-
 -------------------------------------
 
+
+Copied the following files for /bin/busybox:
 '/bin/busybox' -> '/usr/src/initramfs/bin/busybox'
+
+Copied the following files for /dev/console:
 '/dev/console' -> '/usr/src/initramfs/dev/console'
+
+Copied the following files for /dev/null:
 '/dev/null' -> '/usr/src/initramfs/dev/null'
+
+Copied the following files for /dev/random:
 '/dev/random' -> '/usr/src/initramfs/dev/random'
+
+Copied the following files for /dev/tty:
 '/dev/tty' -> '/usr/src/initramfs/dev/tty'
+
+Copied the following files for /dev/urandom:
 '/dev/urandom' -> '/usr/src/initramfs/dev/urandom'
+
+Copied the following files for /usr/local/etc/update_initramfs/init_files/init:
 '/usr/local/etc/update_initramfs/init_files/init' -> '/usr/src/initramfs/init'
 mode of '/usr/src/initramfs/init' changed from 0644 (rw-r--r--) to 0744 (rwxr--r--)
+
+Copied the following files for /lib64/libgcc_s.so.1:
 '/lib64/libgcc_s.so.1' -> '/usr/src/initramfs/lib64/libgcc_s.so.1'
+
+Copied the following files for /sbin/cryptsetup:
 '/usr/lib64/libcryptsetup.so.12' -> '/usr/src/initramfs/usr/lib64/libcryptsetup.so.12'
 '/usr/lib64/libpopt.so.0' -> '/usr/src/initramfs/usr/lib64/libpopt.so.0'
 '/lib64/libuuid.so.1' -> '/usr/src/initramfs/lib64/libuuid.so.1'
@@ -126,9 +144,13 @@ mode of '/usr/src/initramfs/init' changed from 0644 (rw-r--r--) to 0744 (rwxr--r
 '/lib64/libz.so.1' -> '/usr/src/initramfs/lib64/libz.so.1'
 '/lib64/libdl.so.2' -> '/usr/src/initramfs/lib64/libdl.so.2'
 '/sbin/cryptsetup' -> '/usr/src/initramfs/sbin/cryptsetup'
+
+Copied the following files for /usr/share/consolefonts/ter-112n.psf.gz:
 /usr/share -> /usr/src/initramfs/usr/share
 /usr/share/consolefonts -> /usr/src/initramfs/usr/share/consolefonts
 '/usr/share/consolefonts/ter-112n.psf.gz' -> '/usr/src/initramfs/usr/share/consolefonts/ter-112n.psf.gz'
+
+Copied the following files for /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/libgcc_s.so.1:
 /usr/lib/gcc -> /usr/src/initramfs/usr/lib/gcc
 /usr/lib/gcc/x86_64-pc-linux-gnu -> /usr/src/initramfs/usr/lib/gcc/x86_64-pc-linux-gnu
 /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0 -> /usr/src/initramfs/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0
@@ -199,33 +221,41 @@ Next steps:
 1. Move the file '/usr/src/custom-initramfs-5.10.27-gentoo.cpio.gz' to '/boot/'
 2. Update your bootloader entries
    When using GRUB, you may refer to: https://wiki.gentoo.org/wiki/Custom_Initramfs#Using_GRUB
-
 ```
 
 Content of the log file `/var/log/update_initramfs/update_initramfs.log`:
 ```no-highlight
 -------------
-20210405-2011
+20210405-2036
 -------------
 
-    Copied the following files for /bin/busybox:
+
+Copied the following files for /bin/busybox:
 '/bin/busybox' -> '/usr/src/initramfs/bin/busybox'
-    Copied the following files for /dev/console:
+
+Copied the following files for /dev/console:
 '/dev/console' -> '/usr/src/initramfs/dev/console'
-    Copied the following files for /dev/null:
+
+Copied the following files for /dev/null:
 '/dev/null' -> '/usr/src/initramfs/dev/null'
-    Copied the following files for /dev/random:
+
+Copied the following files for /dev/random:
 '/dev/random' -> '/usr/src/initramfs/dev/random'
-    Copied the following files for /dev/tty:
+
+Copied the following files for /dev/tty:
 '/dev/tty' -> '/usr/src/initramfs/dev/tty'
-    Copied the following files for /dev/urandom:
+
+Copied the following files for /dev/urandom:
 '/dev/urandom' -> '/usr/src/initramfs/dev/urandom'
-    Copied the following files for /usr/local/etc/update_initramfs/init_files/init:
+
+Copied the following files for /usr/local/etc/update_initramfs/init_files/init:
 '/usr/local/etc/update_initramfs/init_files/init' -> '/usr/src/initramfs/init'
 mode of '/usr/src/initramfs/init' changed from 0644 (rw-r--r--) to 0744 (rwxr--r--)
-    Copied the following files for /lib64/libgcc_s.so.1:
+
+Copied the following files for /lib64/libgcc_s.so.1:
 '/lib64/libgcc_s.so.1' -> '/usr/src/initramfs/lib64/libgcc_s.so.1'
-    Copied the following files for /sbin/cryptsetup:
+
+Copied the following files for /sbin/cryptsetup:
 '/usr/lib64/libcryptsetup.so.12' -> '/usr/src/initramfs/usr/lib64/libcryptsetup.so.12'
 '/usr/lib64/libpopt.so.0' -> '/usr/src/initramfs/usr/lib64/libpopt.so.0'
 '/lib64/libuuid.so.1' -> '/usr/src/initramfs/lib64/libuuid.so.1'
@@ -242,17 +272,19 @@ mode of '/usr/src/initramfs/init' changed from 0644 (rw-r--r--) to 0744 (rwxr--r
 '/lib64/libz.so.1' -> '/usr/src/initramfs/lib64/libz.so.1'
 '/lib64/libdl.so.2' -> '/usr/src/initramfs/lib64/libdl.so.2'
 '/sbin/cryptsetup' -> '/usr/src/initramfs/sbin/cryptsetup'
-    Copied the following files for /usr/share/consolefonts/ter-112n.psf.gz:
+
+Copied the following files for /usr/share/consolefonts/ter-112n.psf.gz:
 /usr/share -> /usr/src/initramfs/usr/share
 /usr/share/consolefonts -> /usr/src/initramfs/usr/share/consolefonts
 '/usr/share/consolefonts/ter-112n.psf.gz' -> '/usr/src/initramfs/usr/share/consolefonts/ter-112n.psf.gz'
-    Copied the following files for /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/libgcc_s.so.1:
+
+Copied the following files for /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/libgcc_s.so.1:
 /usr/lib/gcc -> /usr/src/initramfs/usr/lib/gcc
 /usr/lib/gcc/x86_64-pc-linux-gnu -> /usr/src/initramfs/usr/lib/gcc/x86_64-pc-linux-gnu
 /usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0 -> /usr/src/initramfs/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0
 '/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/libgcc_s.so.1' -> '/usr/src/initramfs/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/libgcc_s.so.1'
 
-    Current structure of the initramfs:
+Current structure of the initramfs:
 /usr/src/initramfs
 ├── bin/
 │   └── busybox*
@@ -304,6 +336,6 @@ mode of '/usr/src/initramfs/init' changed from 0644 (rw-r--r--) to 0744 (rwxr--r
         └── consolefonts/
             └── ter-112n.psf.gz
 
-    Generated the following initramfs file:
+Generated the following initramfs file:
 /usr/src/custom-initramfs-5.10.27-gentoo.cpio.gz
 ```
