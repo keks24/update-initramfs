@@ -144,7 +144,7 @@ copyFilesFrom()
 
         for bin_file in "${file_array[@]}"
         do
-            echo -e "\nCopied the following files for ${file_directory}/${bin_file}:" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+            echo -e "\nCopied the following files for '${file_directory}/${bin_file}':" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
             shared_objects_list=$(/usr/bin/ldd "${file_directory}/${bin_file}" 2>&1)
             shared_objects_list_filtered=$(/bin/grep --extended-regexp --only-matching "/[a-z0-9./_-]+" <<< "${shared_objects_list}")
 
@@ -163,7 +163,7 @@ copyFilesFrom()
 
         for init_file in "${file_array[@]}"
         do
-            echo -e "\nCopied the following files for ${file_directory}/${init_file}:" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+            echo -e "\nCopied the following files for '${file_directory}/${init_file}':" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
             eval "${cp_cmd}" "${file_directory}/${init_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
             eval "${chmod_cmd}" 744 "${initramfs_directory}/${init_file}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
         done
@@ -174,7 +174,7 @@ copyFilesFrom()
 
         for other_file in "${file_array[@]}"
         do
-            echo -e "\nCopied the following files for ${file_directory}/${other_file}:" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
+            echo -e "\nCopied the following files for '${file_directory}/${other_file}':" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
             eval "${cp_cmd}" "${file_directory}/${other_file}" "${initramfs_directory}" | eval "${tee_cmd}" "${log_directory}/${log_filename}"
         done
     fi
