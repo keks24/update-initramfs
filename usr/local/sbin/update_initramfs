@@ -34,7 +34,7 @@
 #     ├── lib
 #     └── lib64
 
-command_list=(awk chmod cp date echo grep gzip ldd make md5sum mkdir rm sh tee touch tree)
+command_list=(awk chmod cp cpio date echo find grep gzip ldd make md5sum mkdir rm sh tee touch tree)
 checkCommands()
 {
     unalias "${command_list[@]}" 2>/dev/null
@@ -220,15 +220,8 @@ outputResultInitramfs()
 
 generateInitramfs()
 {
-    if [[ ! -e "${kernel_directory}/usr/gen_init_cpio" ]]
-    then
-        /usr/bin/make --directory="${kernel_directory}/usr" "gen_init_cpio"
-    fi
-
-    eval "${chmod_cmd}" 755 "${kernel_directory}/usr/"{gen_init_cpio,gen_initramfs.sh}
-    pushd "${kernel_directory}" >/dev/null
-    /bin/sh "usr/gen_initramfs.sh" -o "../${initramfs_filename/\.gz/}" "${initramfs_directory}"
-    /bin/gzip --force --best "${initramfs_directory/\/initramfs/}/${initramfs_filename/\.gz/}"
+    pushd "${initramfs_directory}" >/dev/null
+    /usr/bin/find . -print0 | cpio --null --create --format="newc" | /bin/gzip --best --no-name --force --stdout > "${initramfs_directory/\/initramfs/}/${initramfs_filename}"
     popd >/dev/null
 }
 
