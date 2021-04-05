@@ -145,7 +145,7 @@ copyFilesFrom()
         do
             /bin/echo -e "    Copied the following files for ${file_directory}/${bin_file}:" >> "${log_directory}/${log_filename}"
             shared_objects_list=$(/usr/bin/ldd "${file_directory}/${bin_file}" 2>&1)
-            shared_objects_list_filtered=$(/bin/echo ${shared_objects_list} | /bin/grep --extended-regexp --only-matching "/[a-z0-9./_-]+")
+            shared_objects_list_filtered=$(/bin/grep --extended-regexp --only-matching "/[a-z0-9./_-]+" <<< "${shared_objects_list}")
 
             if [[ "${shared_objects_list}" == *"not a dynamic executable" ]]
             then
