@@ -6,7 +6,7 @@
 * Enabled kernel settings to work with an initramfs. Consult [this page](https://wiki.gentoo.org/wiki/Custom_Initramfs) for more information.
 * The following packages are installed:
 ```no-highlight
-awk
+gawk
 chmod
 cp
 cpio
